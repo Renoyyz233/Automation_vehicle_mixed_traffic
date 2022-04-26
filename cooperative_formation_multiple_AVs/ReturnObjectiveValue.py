@@ -134,6 +134,3 @@ def ReturnObjectiveValue(AV_ID, N, alpha1, alpha2, alpha3, gammaType) :
     print(K)
 
     return Obj,stable_bool,stability_condition_bool,K
-
-ID =  [0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0]
-Obj,stable_bool,stability_condition_bool,K = ReturnObjectiveValue(ID, 20, 0.94248, 1.5000, 0.9000, 2)
