@@ -5,39 +5,39 @@ import numpy as np
 def ReturnObjectiveValue(AV_ID, N, alpha1, alpha2, alpha3, gammaType) :
     # Generate the system model and the optimal objective value
     
-    match gammaType :
-        case 1 :
-        #S1
-            gamma_s = 0.01
-            gamma_v = 0.05
-            gamma_u = 0.1
+    if(gammaType == 1) :
+    #S1
+        gamma_s = 0.01
+        gamma_v = 0.05
+        gamma_u = 0.1
         
-        case 2 :
-        #S2
-            gamma_s = 0.03
-            gamma_v = 0.15
-            gamma_u = 0.1
+    elif(gammaType == 2) :
+    #S2
+        gamma_s = 0.03
+        gamma_v = 0.15
+        gamma_u = 0.1
         
-        case 3 :
-        #S3
-            gamma_s = 0.05
-            gamma_v = 0.25
-            gamma_u = 0.1
+    elif(gammaType == 3) :
+    #S3
+        gamma_s = 0.05
+        gamma_v = 0.25
+        gamma_u = 0.1
          
-        case 4 :
-            gamma_s = 0.03
-            gamma_v = 0.15
-            gamma_u = 1
+    elif(gammaType == 4) :
+    #S4
+        gamma_s = 0.03
+        gamma_v = 0.15
+        gamma_u = 1
+    
+    elif(gammaType == 5) :
+        gamma_s = 1
+        gamma_v = 1
+        gamma_u = 0
         
-        case 5 :
-            gamma_s = 1
-            gamma_v = 1
-            gamma_u = 0
-        
-        case 9999 :
-            gamma_s = 0.01
-            gamma_v = 0.05
-            gamma_u = 1e-6
+    elif(gammaType == 9999) :
+        gamma_s = 0.01
+        gamma_v = 0.05
+        gamma_u = 1e-6
 
     AV_number = np.count_nonzero(AV_ID)
     A1 = [[0,-1],[alpha1,-alpha2]]
