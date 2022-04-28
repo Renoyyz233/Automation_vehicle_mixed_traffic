@@ -14,21 +14,24 @@ This is a temporary script file.
 % preceding vehicle), including HDV and AV
 % Correspond to Fig. 12 in our paper.
 '''
-import numpy as np
+
 import math
+import numpy as np
+import cvxpy as cp
 import matplotlib.pyplot as plt
 from matplotlib.collections import LineCollection
 from matplotlib.colors import LinearSegmentedColormap
+
 # In[1] 
 ''' Key Parameters'''
 
 N = 20
-AV_number = 0; # 0 or 1 or 2 or 4
+AV_number = 4 # 0 or 1 or 2 or 4
 
-platoon_bool= 0;
+platoon_bool = 0
 
 # Position of the perturbation
-brakeID = 15;
+brakeID = 15
 
 
 # In[2] 
@@ -82,8 +85,8 @@ s_st   = 5;
 s_go   = 35;
 
 '''%%%%% Type1 %%%%%%%'''
-alpha  = 0.6;
-beta   = 0.9;
+alpha  = 0.6
+beta   = 0.9
 
 '''%%%%%%%%% Type2 %%%%%%%%%'''
 #     alpha  = 1.0;
@@ -146,91 +149,136 @@ alpha2 = alpha+beta;
 alpha3 = beta;
 
 
-
 # In[function] 
-def ReturnObjectiveValue(ID,N,alpha1,alpha2,alpha3,gammaType):
-    ##parameter
-    if gammaType == 1:
+def ReturnObjectiveValue(AV_ID, N, alpha1, alpha2, alpha3, gammaType) :
+    # Generate the system model and the optimal objective value
+    
+    if(gammaType == 1) :
+    #S1
         gamma_s = 0.01
         gamma_v = 0.05
         gamma_u = 0.1
         
-    if gammaType == 2:
+    elif(gammaType == 2) :
+    #S2
         gamma_s = 0.03
         gamma_v = 0.15
         gamma_u = 0.1
         
-    if gammaType == 3:
+    elif(gammaType == 3) :
+    #S3
         gamma_s = 0.05
         gamma_v = 0.25
         gamma_u = 0.1
-        
-    if gammaType == 4:
+         
+    elif(gammaType == 4) :
+    #S4
         gamma_s = 0.03
         gamma_v = 0.15
         gamma_u = 1
-        
-    if gammaType == 5:
+    
+    elif(gammaType == 5) :
         gamma_s = 1
         gamma_v = 1
         gamma_u = 0
         
-    if gammaType == 9999:
+    elif(gammaType == 9999) :
         gamma_s = 0.01
         gamma_v = 0.05
         gamma_u = 1e-6
-    
-    ##
-    AV_number = len(np.nonzero(ID == 1))
+
+    AV_number = np.count_nonzero(AV_ID)
     A1 = [[0,-1],[alpha1,-alpha2]]
     A2 = [[0,1],[0,alpha3]]
     C1 = [[0,-1],[0,0]]
     C2 = [[0,1],[0,0]]
     
-    A = np.zeros((2*N,2*N))
-    B = np.zeros((2*N,AV_number))
-    Q = np.zeros((2*N,2*N))
-    
-    for i in range(1,N+1):
-        Q[2*i-2,2*i-2] = gamma_s
-        Q[2*i-1,2*i-1] = gamma_v
+    A = np.zeros((2 * N, 2 * N))
+    B = np.zeros((2 * N, AV_number))
+    Q = np.zeros((2 * N, 2 * N))
+
+    for i in range(1, N + 1) :
+        Q[2 * i - 2, 2 * i - 2] = gamma_s
+        Q[2 * i - 1, 2 * i - 1] = gamma_v
     
     R = gamma_u * np.eye(AV_number)
-    
+
     A[0:2,0:2] = A1
-    A[0:2, (2*N-1)-1 : 2*N] = A2
-    
-    for i in range(2,N+1):
-        A[(2*i-1-1):(2*i) , (2*i-1-1):(2*i)] = A1
-        A[(2*i-1-1):(2*i) , (2*i-3-1):(2*i-2)] = A2
-    
-    if alpha2**2 - alpha3**2 - 2*alpha1 >0:
+    A[0:2,(2 * N - 1) - 1:2 * N] = A2
+
+    for i in range(2, N + 1) : 
+        A[(2 * i - 1) - 1 : (2 * i) , (2 * i - 1) - 1 : (2 * i)] = A1
+        A[(2 * i - 1) - 1 : (2 * i) , (2 * i - 3) - 1 : (2 * i - 2)] = A2
+
+    if (alpha2 ** 2) - (alpha3 ** 2) - (2 * alpha1) > 0 :
         stability_condition_bool = True
-    else:
+    else :
         stability_condition_bool = False
-    
-    #there might cause a problem find()~
-    temp_x = np.nonzero(np.real(np.linalg.eig(A)[0]) > 0.001)[0]
-    if np.all(temp_x==0):
+
+    temp_x = np.nonzero((np.real(np.linalg.eig(A)[0]) > 0.001)[0])
+    if temp_x == 0 :
         stable_bool = True
-    else:
+    else :
         stable_bool = False
-    
-    k=1
-    for i in range(1,N+1):
-        if ID[i-1] == 1:
+
+    k = 1
+    for i in range(1, N + 1):
+        if ID[i - 1] == 1:
             if i == 1:
-                A[1-1:2, 1-1:2] = C1
-                A[1-1:2, (2*N-1-1):2*N] = C2
+                A[1 - 1 : 2, 1 - 1 : 2] = C1
+                A[1 - 1 : 2, (2 * N - 1 - 1) : 2 * N] = C2
             else:
-                A[(2*i-1-1):(2*i) , (2*i-1-1):(2*i)] = C1
-                A[(2*i-1-1):(2*i) , (2*i-3-1):(2*i-2)] = C2
-            B[2*i-1,k-1] = 1
-            k = k+1
-    
-    ## Call Yalmip to calculate the optimum
-    
-    
+                A[(2 * i - 2) : (2 * i) , (2 * i - 2) : (2 * i)] = C1
+                A[(2 * i - 2) : (2 * i) , (2 * i - 4) : (2 * i - 2)] = C2
+            B[2 * i - 1, k - 1] = 1
+            k = k + 1
+
+    # Call Yalmip to calculate the optimum
+    epsilon   = 1e-5
+
+    n = len(A)  # number of states
+    m = len(B[0]) # number of inputs
+
+    # assume each vehicle has a deviation
+    B1 = np.eye(n)
+    B1[0 : n : 2, 0 : n : 2] = 0
+
+    # B1 = B;
+    # assume disturbance is the same as input
+
+    # variables
+    # X = cp.Variable(shape = (n,n))
+    # Z = cp.Variable(shape = (m,n))
+    # Y = cp.Variable(shape = (m,m))
+    # constraints = [M + M.T + (B1 @ B1.T) <= 0,\
+    #    X - epsilon *  np.eye(n) >= 0,\
+    #    cp.vstack((cp.hstack((Y,Z)), cp.hstack((Z.T,X)))) >= 0]
+
+    S = cp.Variable((m + n, m + n), symmetric = True)
+
+    # constraints
+    constraints  = [(A @ S[m:,m:] - B @ S[0 : m,m:]) + (A @ S[m:,m:] - B @ S[0 : m,m:]).T + B1 @ B1.T << 0 ,\
+         S[m:,m:] - epsilon * np.eye(n) >> 0,\
+         S >> 0]
+
+    # print(cp.installed_solvers())
+
+    obj = cp.trace(Q @ S[m:,m:]) + cp.trace(R @ S[0:m,0:m])
+    problem = cp.Problem(cp.Minimize(obj), constraints)
+    problem.solve(solver = cp.MOSEK, verbose = True)
+
+    Xd = S[m:,m:].value
+    Zd = S[0:m,m:].value
+    Yd = S[0:m,0:m].value
+
+    K = Zd @ np.linalg.inv(Xd)
+    Obj = cp.trace(Q @ Xd) + cp.trace(R @ Yd)
+
+    np.set_printoptions(threshold=np.inf)
+    np.set_printoptions(linewidth=100)
+    np.set_printoptions(precision=4)
+    print(K)
+
     return Obj,stable_bool,stability_condition_bool,K
 
 # In[apply f] 
@@ -298,9 +346,9 @@ for k in range(0,NumStep-2):
                 u[u<dcel_max] = dcel_max
                 
             for i_AV in range(0,AV_number):
-                id_AV = AV_position(i_AV)
+                id_AV = AV_position[0][i_AV]
                 flag = (pow(S[k,id_AV,1],2)-pow(S[k,id_AV-1,1],2)) / 2 / (S[k,id_AV-1,0]-S[k,id_AV,0]-sd) > abs(dcel_max)
-                if (flag):
+                if (flag.any()):
                     u[i_AV] = dcel_max
                 S[k,id_AV,2] = u[i_AV]
                 
@@ -311,7 +359,6 @@ for k in range(0,NumStep-2):
 
     S[k+1,:,1] = S[k,:,1] + Tstep*S[k,:,2]
     S[k+1,:,0] = S[k,:,0] + Tstep*S[k,:,1]
-    print(k)
     
 for k in range(NumStep):
     V_avg[k] = np.mean(S[k,:,1])
@@ -324,7 +371,6 @@ Wsize = 20;
 
 # In[7] 
 # Velocity
-
 
 
 #Settling Time
@@ -359,7 +405,7 @@ print("Average settled velocity is ", round(np.mean(S[(int((0.9*TotalTime)/Tstep
 
 
 
-spacing_or_velocity=0
+spacing_or_velocity = 1 # 0 , 1 or 2
 #Display data
 
 fig = plt.figure()
@@ -370,7 +416,7 @@ x = np.arange(0,NumStep)
 
 #y = np.linspace(0,20,20)
 
-if spacing_or_velocity==0:
+if spacing_or_velocity == 0:
     ax = plt.axes(projection ='3d')
     for i in range(N):
         z = np.ones(NumStep-1)*i
@@ -395,7 +441,7 @@ if spacing_or_velocity==0:
     ax.set_title(title)
     plt.show()
 
-if spacing_or_velocity==1:
+if spacing_or_velocity == 1:
     ax = plt.axes(projection ='3d')
     for i in range(N):
         z = np.ones(NumStep-1)*i
@@ -418,7 +464,7 @@ if spacing_or_velocity==1:
 
 
 
-if spacing_or_velocity==2:
+if spacing_or_velocity == 2:
 
     for i in range(N):
         y = S[:,i,0]#circumference
@@ -444,16 +490,3 @@ if spacing_or_velocity==2:
     plt.xlim(20000, 60000)
     plt.ylim(0,400)
     plt.show()
-
-
-
-
-
-
-
-
-
-
-
-
-
