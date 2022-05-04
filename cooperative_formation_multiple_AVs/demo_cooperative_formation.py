@@ -490,3 +490,37 @@ if spacing_or_velocity == 2:
     plt.xlim(20000, 60000)
     plt.ylim(0,400)
     plt.show()
+
+
+# Animation
+from matplotlib import pyplot as plt
+
+x = []
+y = []
+AV_x = []
+AV_y = []
+R = Circumference / 2 / math.pi
+for id in range(20):
+    temp_x = R * math.cos(S[0, id, 0] / Circumference * 2 * math.pi)
+    temp_y = R * math.sin(S[0, id, 0] / Circumference * 2 * math.pi)
+    if ID[id] == 0:
+        x.append(temp_x)
+        y.append(temp_y)
+    else:
+        AV_x.append(temp_x)
+        AV_y.append(temp_y)
+
+    # Mention x and y limits to define their range
+    plt.xlim(-100, 100)
+    plt.ylim(-100, 100)
+
+    if ID[id] == 0:
+        plt.scatter(x, y, color='green')
+        plt.pause(0.01)
+    else:
+        plt.scatter(AV_x, AV_y, color='blue')
+        plt.pause(0.01)
+
+plt.show()
+
+
