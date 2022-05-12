@@ -21,17 +21,18 @@ import cvxpy as cp
 import matplotlib.pyplot as plt
 from matplotlib.collections import LineCollection
 from matplotlib.colors import LinearSegmentedColormap
+from matplotlib.animation import FuncAnimation  
 
 # In[1] 
 ''' Key Parameters'''
 
 N = 20
-AV_number = 4 # 0 or 1 or 2 or 4
+AV_number = 2 # 0 or 1 or 2 or 4
 
-platoon_bool = 0
+platoon_bool = 1 # 0 or 1
 
 # Position of the perturbation
-brakeID = 15
+brakeID = 4
 
 
 # In[2] 
@@ -41,12 +42,12 @@ if AV_number == 0:
     mix = 0
     ActuationTime = 9999
 else:
-    mix = 1;
+    mix = 1
 
-ID = np.zeros([N]); #0. Manually Driven  1. Controller
+ID = np.zeros([N]) #0. Manually Driven  1. Controller
 
 if mix:
-    ActuationTime = 0;
+    ActuationTime = 0
     # Define the spatial formation of the AVs
     
     if AV_number == 4:
@@ -74,51 +75,51 @@ if mix:
         
 
 #Controller Parameter
-gammaType = 2;
+gammaType = 2
 
-v_star = 15;
+v_star = 15
 
 # OVM parameter
-s_star = 20;
-v_max  = 30;
-s_st   = 5;
-s_go   = 35;
+s_star = 20
+v_max  = 30
+s_st   = 5
+s_go   = 35
 
 '''%%%%% Type1 %%%%%%%'''
 alpha  = 0.6
 beta   = 0.9
 
 '''%%%%%%%%% Type2 %%%%%%%%%'''
-#     alpha  = 1.0;
-#     beta   = 1.5;
+#     alpha  = 1.0
+#     beta   = 1.5
 
 
 
 # In[3] 
 '''Other Parameters'''
 
-acel_max = 2;
-dcel_max = -5;
+acel_max = 2
+dcel_max = -5
 
 '''%Driver Model: OVM'''
 
 '''% safe distance for collision avoidance'''
-sd = 8; # minimum value is zero since the vehicle length is ignored
+sd = 8 # minimum value is zero since the vehicle length is ignored
 
 #Simulation
-TotalTime = 100;
-Tstep = 0.01;
-NumStep = int(TotalTime/Tstep);
+TotalTime = 100
+Tstep = 0.001
+NumStep = int(TotalTime/Tstep)
 #Scenario
-Circumference = s_star*N;
+Circumference = s_star*N
 
 
 #Initial State for each vehicle
 S = np.zeros((NumStep,N,3))
-dev_s = 0;
-dev_v = 0;
-co_v = 1.0;
-v_ini = co_v*v_star; #Initial velocity
+dev_s = 0
+dev_v = 0
+co_v = 1.0
+v_ini = co_v * v_star #Initial velocity
 #from -dev to dev
 
 var1 = np.linspace(Circumference, s_star, N)
@@ -131,22 +132,22 @@ S[0, :, 1] =  var1 + var2
 
 # In[4] 
 #Velocity Difference
-V_diff = np.zeros([NumStep,N]);
+V_diff = np.zeros([NumStep,N])
 #Following Distance
-D_diff = np.zeros([NumStep,N]);
-temp = np.zeros([N]);
+D_diff = np.zeros([NumStep,N])
+temp = np.zeros([N])
 #Avg Speed
-V_avg = np.zeros((NumStep,1));
+V_avg = np.zeros((NumStep,1))
 
-X = np.zeros((2*N,NumStep));
+X = np.zeros((2*N,NumStep))
 
 
 # In[4] 
 ##Controller
 
-alpha1 = alpha*v_max/2* math.pi /(s_go-s_st)* math.sin (math.pi*(s_star-s_st)/(s_go-s_st));
-alpha2 = alpha+beta;
-alpha3 = beta;
+alpha1 = alpha*v_max/2* math.pi /(s_go-s_st)* math.sin (math.pi*(s_star-s_st)/(s_go-s_st))
+alpha2 = alpha+beta
+alpha3 = beta
 
 
 # In[function] 
@@ -283,7 +284,7 @@ def ReturnObjectiveValue(AV_ID, N, alpha1, alpha2, alpha3, gammaType) :
 
 # In[apply f] 
 if mix:
-    Obj,stable_bool,stability_condition_bool,K = ReturnObjectiveValue(ID,N,alpha1,alpha2,alpha3,gammaType);
+    Obj,stable_bool,stability_condition_bool,K = ReturnObjectiveValue(ID,N,alpha1,alpha2,alpha3,gammaType)
 
 
 # In[5] 
@@ -366,8 +367,8 @@ for k in range(NumStep):
 
 # In[6] 
 #Plot
-Lwidth = 1.2;
-Wsize = 20;
+Lwidth = 1.2
+Wsize = 20
 
 # In[7] 
 # Velocity
@@ -375,13 +376,13 @@ Wsize = 20;
 
 #Settling Time
 final_velocity = V_avg[NumStep-2]
-above_2_percent = final_velocity*1.03
-below_2_percent = final_velocity*0.97
+above_1_percent = final_velocity*1.03
+below_1_percent = final_velocity*0.97
 
 settling_time = 0
 for k in range(NumStep-2,0,-1):
     for j in range(N):
-        if (S[k,j,1] > above_2_percent) or (S[k,j,1] < below_2_percent):
+        if (S[k,j,1] > above_1_percent) or (S[k,j,1] < below_1_percent):
             settling_time = k/100
             break
     if (settling_time != 0):
@@ -491,36 +492,51 @@ if spacing_or_velocity == 2:
     plt.ylim(0,400)
     plt.show()
 
-
 # Animation
-from matplotlib import pyplot as plt
+velUpperBound = 15 # color
+velLowerBound = 8 # color
+vehicleSize = 12 # MarkerSize
 
-x = []
-y = []
-AV_x = []
-AV_y = []
-R = Circumference / 2 / math.pi
-for id in range(20):
-    temp_x = R * math.cos(S[0, id, 0] / Circumference * 2 * math.pi)
-    temp_y = R * math.sin(S[0, id, 0] / Circumference * 2 * math.pi)
-    if ID[id] == 0:
-        x.append(temp_x)
-        y.append(temp_y)
-    else:
-        AV_x.append(temp_x)
-        AV_y.append(temp_y)
+fig = plt.figure(figsize=(8, 8), dpi=80) # ADD A PARAMETER TO NUMERICALLY IDENTIFY FIGURE
+fig.set_facecolor('w') 
+axs1 = plt.subplot(121)
+axs1.set_aspect('equal')
+plt.axis('off')
 
-    # Mention x and y limits to define their range
-    plt.xlim(-100, 100)
-    plt.ylim(-100, 100)
+R = Circumference/2/math.pi
+position = [None] * N
 
-    if ID[id] == 0:
-        plt.scatter(x, y, color='green')
-        plt.pause(0.01)
-    else:
-        plt.scatter(AV_x, AV_y, color='blue')
-        plt.pause(0.01)
+def init():
+    #Vehicles
+    for id in range(N) :
+        if not mix :
+            position[id] = plt.plot(R * np.cos(S[0, id, 0] / Circumference * 2 * math.pi), R * np.sin(S[0, id, 0] / Circumference * 2 * math.pi), marker = 'o', markersize = vehicleSize, markerfacecolor = 'g', markeredgecolor = 'k')[0]
+        
+        else :
+            if ID[id] == 0 :
+                position[id] = plt.plot(R * np.cos(S[0, id, 0] / Circumference * 2 * math.pi), R * np.sin(S[0, id, 0] / Circumference * 2 * math.pi), marker = 'o', markersize = vehicleSize, markerfacecolor = 'g', markeredgecolor = 'k')[0]
+            else :
+                position[id] = plt.plot(R * np.cos(S[0, id, 0] / Circumference * 2 * math.pi), R * np.sin(S[0, id, 0] / Circumference * 2 * math.pi), marker = 'o', markersize = vehicleSize, markerfacecolor = 'b', markeredgecolor = 'k')[0]
+    #Road
+    temp = np.linspace(0,2 * math.pi,100)
+    plt.plot(0.87 * R * np.cos(temp), 0.87 * R * np.sin(temp),markerfacecolor = 'k', linewidth = 0.4)
+    plt.plot(1.13 * R * np.cos(temp), 1.13 * R * np.sin(temp),markerfacecolor = 'k', linewidth = 0.4)
+    return position
 
+def update(frame):   
+    #for i in range (int(10/Tstep) - 1, int((TotalTime - 20) / Tstep), 10) :
+    i = int(10/Tstep) - 1 + (10 * frame)
+    for id in range(0,N) : 
+        temp = np.linspace(0,2 * math.pi,100)
+        position[id].set_xdata(R * np.cos(S[i,id,0] / Circumference * 2 * math.pi))
+        position[id].set_ydata(R * np.sin(S[i,id,0] / Circumference * 2 * math.pi))
+        if S[i,id,1] < velLowerBound :
+            temp = velLowerBound
+        elif S[i,id,1] > velUpperBound :
+            temp = velUpperBound
+        else :
+            temp = S[i,id,1]
+    return position
+
+ani = FuncAnimation(fig, update, frames = 7000, interval = 1, init_func=init, repeat=True, blit=True)
 plt.show()
-
-
