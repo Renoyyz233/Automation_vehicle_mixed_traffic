@@ -21,7 +21,8 @@ import cvxpy as cp
 import matplotlib.pyplot as plt
 from matplotlib.collections import LineCollection
 from matplotlib.colors import LinearSegmentedColormap
-from matplotlib.animation import FuncAnimation  
+from matplotlib.animation import FuncAnimation
+
 
 # In[1] 
 ''' Key Parameters'''
@@ -495,26 +496,26 @@ if spacing_or_velocity == 2:
 # Animation
 velUpperBound = 15 # color
 velLowerBound = 8 # color
-vehicleSize = 12 # MarkerSize
+vehicleSize = 10.5 # MarkerSize
 
-fig = plt.figure(figsize=(8, 8), dpi=80) # ADD A PARAMETER TO NUMERICALLY IDENTIFY FIGURE
+fig = plt.figure(figsize=(16, 9), dpi=80) # ADD A PARAMETER TO NUMERICALLY IDENTIFY FIGURE
 fig.set_facecolor('w') 
 axs1 = plt.subplot(121)
 axs1.set_aspect('equal')
 plt.axis('off')
 
-R = Circumference/2/math.pi
+R = Circumference/2/math.pi * 2
 position = [None] * N
 
 def init():
     #Vehicles
     for id in range(N) :
         if not mix :
-            position[id] = plt.plot(R * np.cos(S[0, id, 0] / Circumference * 2 * math.pi), R * np.sin(S[0, id, 0] / Circumference * 2 * math.pi), marker = 'o', markersize = vehicleSize, markerfacecolor = 'g', markeredgecolor = 'k')[0]
+            position[id] = plt.plot(R * np.cos(S[0, id, 0] / Circumference * 2 * math.pi), R * np.sin(S[0, id, 0] / Circumference * 2 * math.pi), marker = 'o', markersize = vehicleSize, markerfacecolor = '#008000', markeredgecolor = 'k')[0]
         
         else :
             if ID[id] == 0 :
-                position[id] = plt.plot(R * np.cos(S[0, id, 0] / Circumference * 2 * math.pi), R * np.sin(S[0, id, 0] / Circumference * 2 * math.pi), marker = 'o', markersize = vehicleSize, markerfacecolor = 'g', markeredgecolor = 'k')[0]
+                position[id] = plt.plot(R * np.cos(S[0, id, 0] / Circumference * 2 * math.pi), R * np.sin(S[0, id, 0] / Circumference * 2 * math.pi), marker = 'o', markersize = vehicleSize, markerfacecolor = '#008000', markeredgecolor = 'k')[0]
             else :
                 position[id] = plt.plot(R * np.cos(S[0, id, 0] / Circumference * 2 * math.pi), R * np.sin(S[0, id, 0] / Circumference * 2 * math.pi), marker = 'o', markersize = vehicleSize, markerfacecolor = 'b', markeredgecolor = 'k')[0]
     #Road
@@ -530,12 +531,27 @@ def update(frame):
         temp = np.linspace(0,2 * math.pi,100)
         position[id].set_xdata(R * np.cos(S[i,id,0] / Circumference * 2 * math.pi))
         position[id].set_ydata(R * np.sin(S[i,id,0] / Circumference * 2 * math.pi))
+
+        velocityMap = [
+                    (1,0,0), (1, 0.09375, 0), (1, 0.1875,0), (1, 0.28125,0), (1, 0.375,0),
+                    (1, 0.46875, 0), (1, 0.5625, 0), (1, 0.65625, 0), (1, 0.75, 0), (1, 0.84375, 0), (1, 0.9375, 0),
+                    (0.96875, 1, 0), (0.875, 1, 0), (0.78125, 1, 0), (0.6875, 1, 0), (0.59375, 1, 0), (0.5, 1, 0),
+                    (0.40625, 1, 0), (0.3125, 1, 0), (0.21875, 1, 0), (0.125, 1, 0), (0.03125, 1, 0)
+                    ]
+
+
         if S[i,id,1] < velLowerBound :
             temp = velLowerBound
         elif S[i,id,1] > velUpperBound :
             temp = velUpperBound
         else :
             temp = S[i,id,1]
+
+
+        if ID[id] == 0:
+            colorID = min(math.floor((temp - velLowerBound) / (velUpperBound - velLowerBound) * 22) + 1, 22) - 1
+            position[id].set_markerfacecolor(velocityMap[colorID])
+    fig.canvas.draw()
     return position
 
 ani = FuncAnimation(fig, update, frames = 7000, interval = 1, init_func=init, repeat=True, blit=True)
