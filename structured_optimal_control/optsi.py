@@ -50,4 +50,4 @@ def optsi (A,B1,B2,K_Pattern,Q,R) :
     
     K_Opt = Z1 @ np.linalg.inv(X1)
     
-    return [K_Opt, Info]
+    return K_Opt, Info
