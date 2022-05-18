@@ -42,7 +42,7 @@ def optsi (A,B1,B2,K_Pattern,Q,R) :
     # constraints += [np.block([[Y, Z], [Z.T, X]]) >> 0]
     
     prob = cp.Problem(objective, constraints)
-    prob.solve(solver = cp.MOSEK)
+    Info = prob.solve(solver = cp.MOSEK)
     
     X1 = W[m:,m:].value
     Z1 = W[0:m,m:].value
@@ -50,4 +50,4 @@ def optsi (A,B1,B2,K_Pattern,Q,R) :
     
     K_Opt = Z1 @ np.linalg.inv(X1)
     
-    return 
+    return [K_Opt, Info]
