@@ -49,17 +49,5 @@ def optsi (A,B1,B2,K_Pattern,Q,R) :
 
     
     K_Opt = Z1 @ np.linalg.inv(X1)
-
-    # Const = [X-epsilon*eye(n) >= 0, [Y Z; Z' X] >= 0,... 
-    #     (A*X-B2*Z)+(A*X-B2*Z)'+B1*B1' <= 0];
-
-    # %% cost function
-
-    # Obj = trace(Q*X)+trace(R*Y);
-
-    # %% solution via mosek
-    # ops = sdpsettings('solver','mosek');
-    # Info = optimize(Const,Obj,ops);
-    # X1 = value(X);
-    # Z1 = value(Z);
-    # K_Opt = Z1*X1^(-1);
+    
+    return 
