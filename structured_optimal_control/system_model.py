@@ -34,7 +34,7 @@ def system_model(N, AV_number, alpha, beta, v_max, s_st,
         Q[2 * i - 1, 2 * i] = gamma_v
 
     B2 = np.zeros((2 * N, AV_number))
-    B2[2 * N - 1, AV_number] = 1
+    B2[2 * N - 1, AV_number - 1] = 1
 
     if AV_number == 2:
         AV2_Index = np.floor(N / 2)
