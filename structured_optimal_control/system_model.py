@@ -28,12 +28,12 @@ def system_model(N, AV_number, alpha, beta, v_max, s_st,
 
     # Controller
 
-    Q = np.zeros(2 * N);
+    Q = np.zeros(2 * N)
     for i in range(0,N):
         Q[2 * i - 2, 2 * i - 1] = gamma_s
         Q[2 * i - 1, 2 * i] = gamma_v
 
-    B2 = np.zeros(2 * N, AV_number)
+    B2 = np.zeros((2 * N, AV_number))
     B2[2 * N - 1, AV_number] = 1
 
     if AV_number == 2:
@@ -42,11 +42,11 @@ def system_model(N, AV_number, alpha, beta, v_max, s_st,
         A[(2 * AV2_Index - 4): (2 * AV2_Index), (2 * AV2_Index - 4): (2 * AV2_Index - 2)] = C2
         B2[2 * AV2_Index - 1, 1] = 1
 
-    B1 = np.zeros(2 * N, N)
+    B1 = np.zeros((2 * N, N))
     for i in range(N):
         B1[2 * i - 1, i] = 1
 
-    R = gamma_u * np.eye(AV_number, AV_number)
+    R = gamma_u * np.identity((AV_number, AV_number))
 
     return A,B1,B2,Q,R
 
