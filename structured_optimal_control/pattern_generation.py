@@ -31,3 +31,4 @@ def pattern_generation(N, AV_number, CR):
 
             K_Pattern[1, 2 * N - 2 : 2 * N] = [1, 1]
 
+    return K_Pattern
