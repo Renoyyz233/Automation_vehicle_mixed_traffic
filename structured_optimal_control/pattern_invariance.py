@@ -1,5 +1,5 @@
 import numpy as np
-
+import scipy as sps
 def pattern_invariance(S):
 #Generate a maximally sparsity-wise invariant (MSI) subplace with respect to X
 # See Section IV of the following paper
@@ -18,8 +18,14 @@ def pattern_invariance(S):
                         X[j - 1, k - 1] = 0
 
     # symmetric part
-    Xu = np.triu(X.conj().np.transpose()) * np.triu(X)
-    X = Xu + Xu.conj().np.transpose()
-    X = np.todense(X.copy().tocsr())
+    #print("ss",len(X))
+    Xu = np.triu(X.conj().transpose()) * np.triu(X)
+    X = Xu + Xu.conj().transpose()
+    np.set_printoptions(threshold=np.inf)
+
+    #print(len(X))
+    temp_m = sps.tocsr(X)
+    temp_m = temp_m.todense()
+    X = np.full()
 
     return X
