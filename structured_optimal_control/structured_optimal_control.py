@@ -12,23 +12,22 @@ from pattern_generation import *
 from pattern_invariance import *
 from system_model import *
 
-comm_limited = 1; # whether there is communication constraint
-CR = 5; # communication range if there is communication constraint
+comm_limited = 1 # whether there is communication constraint
+CR = 5 # communication range if there is communication constraint
 
 
 ## Parameters
 
-N = 20;
-V_star = 15;
+N = 20
+V_star = 15
 
-
-alpha  = 0.6 + 0.1 - 0.2 * np.random.random((N,1))
-beta   = 0.9 + 0.1 - 0.2 * np.random.random((N,1))
-v_max  = 30 * np.ones((N,1))
-s_st   = 5 * np.ones((N,1))
-s_go   = 30 + 10 * np.random.random((N,1))
-v_star = V_star * np.ones((N,1))
-s_star = np.acos(1-v_star / v_max * 2)/ math.pi * (s_go-s_st)+s_st
+alpha = 0.6 + 0.1 - 0.2 * np.random.random((N, 1))
+beta = 0.9 + 0.1 - 0.2 * np.random.random((N, 1))
+v_max = 30 * np.ones((N, 1))
+s_st = 5 * np.ones((N, 1))
+s_go = 30 + 10 * np.random.random((N, 1))
+v_star = V_star * np.ones((N, 1))
+s_star = np.arccos(1 - v_star / v_max * 2) / math.pi * (s_go - s_st) + s_st
 
 AV_number = 1
 
@@ -38,12 +37,10 @@ gamma_v = 0.15
 gamma_u = 1
 
 # Controller design
-
-
-[A,B1,B2,Q,R] = system_model(N,AV_number,alpha,beta,v_max,s_st,s_go,s_star,gamma_s,gamma_v,gamma_u)
+[A, B1, B2, Q, R] = system_model(N, AV_number, alpha, beta, v_max, s_st, s_go, s_star, gamma_s, gamma_v, gamma_u)
 
 if comm_limited:
     K_Pattern = pattern_generation(N,AV_number,CR)
-    [K,Info] = optsi(A,B1,B2,K_Pattern,Q,R)
+    [K, Info] = optsi(A, B1, B2, K_Pattern, Q, R)
 else:
-    K = lqrsdp(A,B1,B2,Q,R)
+    K = lqr_sdp(A, B1, B2, Q, R)
