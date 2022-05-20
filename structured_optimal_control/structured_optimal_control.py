@@ -37,7 +37,7 @@ gamma_v = 0.15
 gamma_u = 1
 
 # Controller design
-[A, B1, B2, Q, R] = system_model(N, AV_number, alpha, beta, v_max, s_st, s_go, s_star, gamma_s, gamma_v, gamma_u)
+A, B1, B2, Q, R = system_model(N, AV_number, alpha, beta, v_max, s_st, s_go, s_star, gamma_s, gamma_v, gamma_u)
 
 if comm_limited:
     K_Pattern = pattern_generation(N,AV_number,CR)
