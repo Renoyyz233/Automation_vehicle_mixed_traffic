@@ -2,7 +2,7 @@
 import cvxpy as cp
 import numpy as np
 
-def lqr_sdp(A, B1, B, Q, R):    
+def lqrsdp(A, B1, B, Q, R):    
     n = len(A)
     m = len(B[0])
     
@@ -26,7 +26,7 @@ def lqr_sdp(A, B1, B, Q, R):
     # constraints += [np.block([[Y, Z], [Z.T, X]]) >> 0]
     
     prob = cp.Problem(objective, constraints)
-    prob.solve(solver = cp.MOSEK)
+    prob.solve(solver = cp.MOSEK, verbose = True)
     
     Xd = W[m:,m:].value
     Zd = W[0:m,m:].value
