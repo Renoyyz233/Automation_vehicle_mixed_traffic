@@ -12,7 +12,6 @@ def pattern_generation(N, AV_number, CR):
             K_Pattern[0, 2 * i - 2: 2 * i] = [1, 1]
             K_Pattern[0, 2 * N - 2: 2 * N] = [1, 1]
 
-
     if AV_number == 2:
         if CR >= N - np.floor(N / 2):
             K_Pattern = np.ones((2, 2 * N))
@@ -30,5 +29,5 @@ def pattern_generation(N, AV_number, CR):
                 K_Pattern[1, 2 * i - 2 : 2 * i] = [1, 1]
 
             K_Pattern[1, 2 * N - 2 : 2 * N] = [1, 1]
-
+            
     return K_Pattern
