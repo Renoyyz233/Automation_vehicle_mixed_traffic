@@ -12,9 +12,8 @@ from pattern_generation import *
 from pattern_invariance import *
 from system_model import *
 
-comm_limited = 1 # whether there is communication constraint
+comm_limited = 0 # whether there is communication constraint
 CR = 5 # communication range if there is communication constraint
-
 
 ## Parameters
 
@@ -38,9 +37,10 @@ gamma_u = 1
 
 # Controller design
 A, B1, B2, Q, R = system_model(N, AV_number, alpha, beta, v_max, s_st, s_go, s_star, gamma_s, gamma_v, gamma_u)
-
 if comm_limited:
     K_Pattern = pattern_generation(N,AV_number,CR)
     [K, Info] = optsi(A, B1, B2, K_Pattern, Q, R)
 else:
-    K = lqr_sdp(A, B1, B2, Q, R)
+    K = lqrsdp(A, B1, B2, Q, R)
+# np.set_printoptions(threshold = np.inf, precision=4)
+# print(K)
