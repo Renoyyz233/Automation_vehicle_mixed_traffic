@@ -1,5 +1,6 @@
 import numpy as np
 import cvxpy as cp
+from pattern_invariance import *
 
 def optsi (A,B1,B2,K_Pattern,Q,R) :
     # For a given pattern of K, calculate the optimal feedback gain using sparsity invirance
@@ -19,34 +20,46 @@ def optsi (A,B1,B2,K_Pattern,Q,R) :
     #                W[0:m, m:] == Z,   - Matrix Z has sparsity pattern in K_Pattern
     #                W[m:,m:] == X,    - block diagonal X
 
+    constraints = []
+
     for i in range(n):
         for j in range(i,n):
             if Rp[i,j] == 0:
-                W[m+i,m+j] = 0 
-                W[m+j,m+i] = 0
+                constraints += [W[m+i,m+j] == 0]
+                constraints += [W[m+j,m+i] == 0]
 
     for i in range(m):
         for j in range(n):
             if Tp[i,j] == 0:
-                W[i,m+j] = 0;
+                constraints += [W[i,m+j] == 0]
   
     # constraint
 
-    objective    = cp.Minimize( cp.trace( Q@W[m:,m:] ) + cp.trace( R@W[0:m,0:m] ) )
-    constraints  = [(A@W[m:,m:] - B2@W[0:m,m:]) + (A@W[m:,m:] - B2@W[0:m,m:]).T + B1@(B1).T << 0]
+    objective    = cp.Minimize(cp.trace(Q @ W[m:,m:]) + cp.trace(R @ W[0:m,0:m]))
+    constraints += [(A@W[m:,m:] - B2@W[0:m,m:]) + (A@W[m:,m:] - B2@W[0:m,m:]).T + B1@(B1).T << 0]
     constraints += [ W[m:,m:] - epsilon*np.identity(n) >> 0]
     constraints += [W >> 0]
-    
+
     # constraints  = [-((A@X - B@Z) + (A@X - B@Z).T + H@(H).T) >> 0]
     # constraints += [X - epsilon*np.identity(n) >> 0]
     # constraints += [np.block([[Y, Z], [Z.T, X]]) >> 0]
     
     prob = cp.Problem(objective, constraints)
-    Info = prob.solve(solver = cp.MOSEK)
-    
-    X1 = W[m:,m:].value
-    Z1 = W[0:m,m:].value
+    Info = prob.solve(solver = cp.MOSEK, verbose = True)
 
+    X1 = W[m:,m:].value
+    for i in range(n):
+        for j in range(i,n):
+            if Rp[i,j] == 0:
+                X1[i,j] = 0
+                X1[j,i] = 0
+
+
+    Z1 = W[0:m,m:].value
+    for i in range(m):
+        for j in range(n):
+            if Tp[i,j] == 0:
+                Z1[i,j] = 0
     
     K_Opt = Z1 @ np.linalg.inv(X1)
     
