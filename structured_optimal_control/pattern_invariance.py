@@ -17,7 +17,6 @@ def pattern_invariance(S):
                         X[j - 1, k - 1] = 0
 
     # symmetric part
-    #print("ss",len(X))
     Xu = np.triu(X.conj().transpose()) * np.triu(X)
     X = Xu + Xu.conj().transpose()
     for i in range(len(X)):
