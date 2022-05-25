@@ -47,4 +47,3 @@ def system_model(N, AV_number, alpha, beta, v_max, s_st,
     R = gamma_u * np.identity(AV_number)
 
     return A,B1,B2,Q,R
-
