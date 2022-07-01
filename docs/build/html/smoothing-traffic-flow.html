@@ -41,24 +41,24 @@
 <li><a class="reference internal" href="index.html">Welcome</a></li>
 
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Smoothing traffic flow</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#data-preparation">Introduction</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#docker">Function</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#recommender-folder">Animation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#test-folder">Experiment result</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smoothing-traffic-flow.html#data-preparation">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smoothing-traffic-flow.html#docker">Implementation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smoothing-traffic-flow.html#recommender-folder">Animation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smoothing-traffic-flow.html#test-folder">Experiment result</a></li>
 </ul>
 
 <li class="toctree-l1 current"><a class="current reference internal" href="structured_optimal_control.html">Structured Optimal control</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#data-preparation">Introduction</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#docker">Function</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#recommender-folder">Animation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#test-folder">Experiment result</a></li>
+<li class="toctree-l2"><a class="reference internal" href="structured_optimal_control.html#data-preparation">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="structured_optimal_control.html#docker">Implementation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="structured_optimal_control.html#recommender-folder">Animation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="structured_optimal_control.html#test-folder">Experiment result</a></li>
 </ul>
 
 <li class="toctree-l1 current"><a class="current reference internal" href="cooperative_formation_multiple.html">Cooperative formation multiple</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#data-preparation">Introduction</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#docker">Function</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#recommender-folder">Animation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#test-folder">Experiment result</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cooperative_formation_multiple.html#data-preparation">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cooperative_formation_multiple.html#docker">Implementation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cooperative_formation_multiple.html#recommender-folder">Animation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cooperative_formation_multiple.html#test-folder">Experiment result</a></li>
 </ul>
 </li>
 </ul>
@@ -87,307 +87,37 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
 
-  <section id="recommender-system">
-<h1>Recommender System<a class="headerlink" href="#recommender-system" title="Permalink to this heading"></a></h1>
-<p>Recommender system runs on fastapi and it recommends similar courses given the key words or course name.
-It is currently using nearest neighbour algo on the sentence embedding of the course description scraped from the UCSD catalog websites.</p>
+<section id="recommender-system">
+<h1>Smoothing traffic flow<a class="headerlink" href="#recommender-system" title="Permalink to this heading"></a></h1>
+<p>Although large-scale numerical simulations and small-scale experiments have shown promising results,
+  a comprehensive theoretical understanding to smooth traffic flow via AVs is lacking. Here,
+   from a control-theoretic perspective, we establish analytical results on the controllability, stabilizability,
+   and reachability of a mixed traffic system consisting of HDVs and AVs in a ring road.</p>
+
 <section id="data-preparation">
-<h2>Data Preparation<a class="headerlink" href="#data-preparation" title="Permalink to this heading"></a></h2>
-<p>Embedding extraction is used to extract the embedding and store them in the numpy file.</p>
-<p><strong>Data folder</strong> has the data extracted and stored using embedding extraction file.
-Umap embedding is used to plot the course similarity on 2D is also generated and stored in numpy file
-along with this mapping between the course name and embedding index.</p>
-<p>For nearest neighbour algorithm, we use Faiss library from facebook which is tested on 1B search points and it’s fast.</p>
-<p>requirment.txt comprises all python libraries used in the project.</p>
+<h2>Introduction<a class="headerlink" href="#data-preparation" title="Permalink to this heading"></a></h2>
+<img src="images/smoothing_traffic_flow/mixed_traffic_flow_schematic diagram.png" width="500" alt="Smoothing traffic flow">
 </section>
+
 <section id="docker">
-<h2>Docker<a class="headerlink" href="#docker" title="Permalink to this heading"></a></h2>
-<p>The Docker file has the instruction to containerize the application.
-Docker image is already in docker hub and can be pulled by
-docker pull sumukhbadam/recommender:latest</p>
-<p><strong>To run without Docker</strong></p>
-<p>pip install -r requirments.txt</p>
-<p><strong>To run the uvicorn server</strong></p>
-<p>uvicorn recommender.asgi:app –host 0.0.0.0</p>
+<h2>Implementation<a class="headerlink" href="#docker" title="Permalink to this heading"></a></h2>
+
+
+
 </section>
 <section id="recommender-folder">
-<h2>Recommender folder<a class="headerlink" href="#recommender-folder" title="Permalink to this heading"></a></h2>
-<p><strong>asgi.py</strong>: This file holds the function for get and post function for fast api</p>
-<p><strong>dataobj.py</strong>: We use pydantic for data model in fast api and this file has all data model</p>
-<p><strong>Embedding_extraction.py</strong>: This is used to prepare data for extracting embedding and umap features etc.</p>
-<dl class="py function">
-<dt class="sig sig-object py" id="Embedding_extraction.extract_embedding">
-<span class="sig-prename descclassname"><span class="pre">Embedding_extraction.</span></span><span class="sig-name descname"><span class="pre">extract_embedding</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modelname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'paraphrase-MiniLM-L6-v2'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datadump</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'data'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#Embedding_extraction.extract_embedding" title="Permalink to this definition"></a></dt>
-<dd><p>Extracts the embedding of the course description from the pandas dataframe.
-Sentence transformer is used to get the embedding of the course</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>dataframe</strong> (<em>pd.DataFrame</em>) – pandas dataframe with course name and course description</p></li>
-<li><p><strong>modelname</strong> (<em>str</em>) – Any model with capability of generating sentence info listed in the sentence transfomer lib. Defaults to ‘paraphrase-MiniLM-L6-v2’.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="Embedding_extraction.get_embedding">
-<span class="sig-prename descclassname"><span class="pre">Embedding_extraction.</span></span><span class="sig-name descname"><span class="pre">get_embedding</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_string</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SentenceTransformer</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">array</span></span></span><a class="headerlink" href="#Embedding_extraction.get_embedding" title="Permalink to this definition"></a></dt>
-<dd><p>Generates embedding using the model</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>input_string</strong> (<em>str</em>) – input string which is used for extraction of embedding</p></li>
-<li><p><strong>model</strong> (<em>SentenceTransformer</em>) – model used for sentence embedding extraction model should have encode function</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>embedding of the sentence(np.ndarray)</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="Embedding_extraction.get_model">
-<span class="sig-prename descclassname"><span class="pre">Embedding_extraction.</span></span><span class="sig-name descname"><span class="pre">get_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modelname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'paraphrase-MiniLM-L6-v2'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">SentenceTransformer</span></span></span><a class="headerlink" href="#Embedding_extraction.get_model" title="Permalink to this definition"></a></dt>
-<dd><p>create obj of the sentence transformer for embedding extraction</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>modelname</strong> (<em>str</em>) – model name - Defaults to ‘paraphrase-MiniLM-L6-v2’.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>model of instance sentence transformer</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="Embedding_extraction.get_umap_feature">
-<span class="sig-prename descclassname"><span class="pre">Embedding_extraction.</span></span><span class="sig-name descname"><span class="pre">get_umap_feature</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sentence_embedding_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'data/sentence_embedding.npy'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dumpfilename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'data/umap_embedding.npy'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#Embedding_extraction.get_umap_feature" title="Permalink to this definition"></a></dt>
-<dd><p>Dump the umap embedding from the sentence embedding to plot the similarity</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>sentence_embedding_file</strong> (<em>str</em>) – File name for sentence embedding. Defaults to ‘data/sentence_embedding.npy’.</p></li>
-<li><p><strong>dumpfilename</strong> (<em>str</em>) – name of the file to dump the umap features. Defaults to ‘data/umap_embedding.npy’.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<p>course_eval.py: This file has class for getting course details for undergraduate like GPA etc</p>
-<dl class="py function">
-<dt class="sig sig-object py" id="course_eval.course_eval.getprofname">
-<span class="sig-prename descclassname"><span class="pre">course_eval.course_eval.</span></span><span class="sig-name descname"><span class="pre">getprofname</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">department</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span></span></span><a class="headerlink" href="#course_eval.course_eval.getprofname" title="Permalink to this definition"></a></dt>
-<dd><p>Return the list of  prof names from the department</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>department</strong> (<em>str</em>) – Name of the department</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>prof names</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="course_eval.course_eval.getdeptname">
-<span class="sig-prename descclassname"><span class="pre">course_eval.course_eval.</span></span><span class="sig-name descname"><span class="pre">getdeptname</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span></span></span><a class="headerlink" href="#course_eval.course_eval.getdeptname" title="Permalink to this definition"></a></dt>
-<dd><p>Returns all the departments</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>list of department name</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="course_eval.course_eval.get_radar_plotdetails">
-<span class="sig-prename descclassname"><span class="pre">course_eval.course_eval.</span></span><span class="sig-name descname"><span class="pre">get_radar_plotdetails</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">course</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span></span></span><a class="headerlink" href="#course_eval.course_eval.get_radar_plotdetails" title="Permalink to this definition"></a></dt>
-<dd><p>Return the Radar plot details for the given course</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>course</strong> (<em>str</em>) – course name for which radar plot is shown</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>List of parameters for radar plot</p>
-</dd>
-</dl>
-</dd></dl>
-
-<p><strong>recommendation.py</strong>: This file has class which helps in getting recommendation and umap details for course.</p>
-<dl class="py class">
-<dt class="sig sig-object py" id="recommendation.courserecommender">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">recommendation.</span></span><span class="sig-name descname"><span class="pre">courserecommender</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">embedding_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'./data/sentence_embedding.npy'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embedding_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">384</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">course_map_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'./data/coursemap.pk'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coursemap_back_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'./data/coursemap_back.pk'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coursemap_desp_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'./data/coursemap_despk.pk'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">umap_embedding_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'./data/umap_embedding.npy'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#recommendation.courserecommender" title="Permalink to this definition"></a></dt>
-<dd><p>This is recommendation class which gives recommendation
-given the course id or string</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="recommendation.courserecommender.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">embedding_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'./data/sentence_embedding.npy'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embedding_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">384</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">course_map_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'./data/coursemap.pk'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coursemap_back_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'./data/coursemap_back.pk'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coursemap_desp_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'./data/coursemap_despk.pk'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">umap_embedding_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'./data/umap_embedding.npy'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#recommendation.courserecommender.__init__" title="Permalink to this definition"></a></dt>
-<dd><p>Reads the sentence embedding and loads the data for recommendation.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>embedding_file</strong> (<em>str</em>) – file name with sentence embedding. Defaults to ‘./data/sentence_embedding.npy’.</p></li>
-<li><p><strong>embedding_size</strong> (<em>int</em>) – sentence embedding vector dimension. Defaults to 384.</p></li>
-<li><p><strong>course_map_file</strong> (<em>str</em>) – pickle file with course map. Defaults to ‘.data/coursemap.pk’.</p></li>
-<li><p><strong>coursemap_back_file</strong> (<em>str</em>) – pickle file with reverse course map . Defaults to ‘./data/coursemap_back.pk’.</p></li>
-<li><p><strong>coursemap_desp_file</strong> (<em>str</em>) – pickle file with course description .Defaults to  ‘./data/coursemap_despk.pk’.</p></li>
-<li><p><strong>umap_embedding_file</strong> (<em>str</em>) – Umap embedding with for course .Defaults to  ‘./data/umap_embedding.npy’.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="recommendation.courserecommender.get_recommendation">
-<span class="sig-name descname"><span class="pre">get_recommendation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_string</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_of_recommend</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">obj</span></span></span><a class="headerlink" href="#recommendation.courserecommender.get_recommendation" title="Permalink to this definition"></a></dt>
-<dd><p>Given the list of the string it provides the dict of recommended courses and description</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>input_string</strong> (<em>List</em>) – list of string they can be course number or string of topics</p></li>
-<li><p><strong>number_of_recommend</strong> (<em>int</em>) – number of similar recommmended courses per string</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>dict of string and for each string its a dict with course and its description</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="recommendation.courserecommender.get_umap">
-<span class="sig-name descname"><span class="pre">get_umap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_string</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">vectordict</span></span></span><a class="headerlink" href="#recommendation.courserecommender.get_umap" title="Permalink to this definition"></a></dt>
-<dd><p>Return the 2D vector position of the embedding of the course for visulization</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>input_string</strong> (<em>List</em>) – list of course name</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>dict of the course and unit vector values for course</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<p><strong>undergrade_recommendation.py</strong>: This file has class which help in recommending class for three courses and extra constraints.</p>
-<dl class="py class">
-<dt class="sig sig-object py" id="undergrade_recommendation.Planner">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">undergrade_recommendation.</span></span><span class="sig-name descname"><span class="pre">Planner</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">course_map_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'data/coursemap.pk'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coursemap_back_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'data/coursemap_back.pk'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coursemap_desp_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'data/coursemap_despk.pk'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embedding_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'./data/sentence_embedding.npy'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#undergrade_recommendation.Planner" title="Permalink to this definition"></a></dt>
-<dd><p>Helps to plan the course</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="undergrade_recommendation.Planner.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">course_map_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'data/coursemap.pk'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coursemap_back_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'data/coursemap_back.pk'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coursemap_desp_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'data/coursemap_despk.pk'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embedding_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'./data/sentence_embedding.npy'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#undergrade_recommendation.Planner.__init__" title="Permalink to this definition"></a></dt>
-<dd><p>Help to plan the course for the quater given the three course key and additional inputs</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>course_map_file</strong> (<em>str</em>) – _description_. Defaults to ‘data/coursemap.pk’.</p></li>
-<li><p><strong>coursemap_back_file</strong> (<em>str</em>) – _description_. Defaults to ‘data/coursemap_back.pk’.</p></li>
-<li><p><strong>coursemap_desp_file</strong> (<em>str</em>) – _description_. Defaults to ‘data/coursemap_despk.pk’.</p></li>
-<li><p><strong>embedding_file</strong> (<em>str</em>) – _description_. Defaults to ‘./data/sentence_embedding.npy’.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="undergrade_recommendation.Planner.get_course_list">
-<span class="sig-name descname"><span class="pre">get_course_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">department</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">course_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_of_course</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span></span></span><a class="headerlink" href="#undergrade_recommendation.Planner.get_course_list" title="Permalink to this definition"></a></dt>
-<dd><p>Return similar courses from selected department and
-returned list of courses has len same as num of course</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>department</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – List of department names used to recommend the course from</p></li>
-<li><p><strong>course_key</strong> (<em>str</em>) – key of the course which the resultant course should be similar to</p></li>
-<li><p><strong>num_of_course</strong> (<em>int</em>) – length of courses that is similar to the key. Defaults to 10.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>List: returns the list of courses that match the course key</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="undergrade_recommendation.Planner.get_recommendation">
-<span class="sig-name descname"><span class="pre">get_recommendation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">courses</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">coursereq</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">coursereq</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#undergrade_recommendation.Planner.get_recommendation" title="Permalink to this definition"></a></dt>
-<dd><p>Provide the list of possible combination of courses given requirements</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>courses</strong> (<em>List</em><em>[</em><em>coursereq</em><em>]</em>) – List of Courses with requiements for each courses</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Return the list of dict of possible combination of courses given requirements</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
+<h2>Animation<a class="headerlink" href="#recommender-folder" title="Permalink to this heading"></a></h2>
+<p>Two demonstrations are shown below:</p>
+<p> All the vehicles are HDVs: traffic wave emerges </p>
+<img src="images\smoothing_traffic_flow\smoothing_traffic_flow_all_HDVs.gif" alt="Smoothing traffic flow all HDV">
+<p> There is one AV: dissipating traffic wave </p>
+<img src="images\smoothing_traffic_flow\smoothing_traffic_flow_one_AV.gif" alt="Smoothing traffic flow one AV">
 
 </section>
 <section id="test-folder">
-<h2>Test Folder<a class="headerlink" href="#test-folder" title="Permalink to this heading"></a></h2>
+<h2>Experiment results<a class="headerlink" href="#test-folder" title="Permalink to this heading"></a></h2>
 <p>This folder contains files for test cases.</p>
-<p>test_course_eval.py: This has test cases for course eval file.</p>
-<dl class="py function">
-<dt class="sig sig-object py" id="test_course_eval.test_getprofname">
-<span class="sig-prename descclassname"><span class="pre">test_course_eval.</span></span><span class="sig-name descname"><span class="pre">test_getprofname</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datafilename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'./data/data.csv'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#test_course_eval.test_getprofname" title="Permalink to this definition"></a></dt>
-<dd><p>Test the get profname for the given department</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>datafilename</strong> (<em>str</em>) – filename of the data. Defaults to ‘./data/data.csv’.</p>
-</dd>
-</dl>
-</dd></dl>
 
-<dl class="py function">
-<dt class="sig sig-object py" id="test_course_eval.test_getdeptname">
-<span class="sig-prename descclassname"><span class="pre">test_course_eval.</span></span><span class="sig-name descname"><span class="pre">test_getdeptname</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datafilename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'./data/data.csv'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#test_course_eval.test_getdeptname" title="Permalink to this definition"></a></dt>
-<dd><p>Test the list of departments</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>datafilename</strong> (<em>str</em>) – filename of the data. Defaults to ‘./data/data.csv’.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="test_course_eval.test_radar_plot">
-<span class="sig-prename descclassname"><span class="pre">test_course_eval.</span></span><span class="sig-name descname"><span class="pre">test_radar_plot</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#test_course_eval.test_radar_plot" title="Permalink to this definition"></a></dt>
-<dd><p>Test if the radar plot return the course details</p>
-</dd></dl>
-
-<p>test_recommendation.py: This has test cases for recommendation file.</p>
-<dl class="py function">
-<dt class="sig sig-object py" id="test_recommendation.test_umap">
-<span class="sig-prename descclassname"><span class="pre">test_recommendation.</span></span><span class="sig-name descname"><span class="pre">test_umap</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#test_recommendation.test_umap" title="Permalink to this definition"></a></dt>
-<dd><p>Test the course similarity condition</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="test_recommendation.test_recommendation">
-<span class="sig-prename descclassname"><span class="pre">test_recommendation.</span></span><span class="sig-name descname"><span class="pre">test_recommendation</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#test_recommendation.test_recommendation" title="Permalink to this definition"></a></dt>
-<dd><p>Test the recommmender with key word and course name</p>
-</dd></dl>
-
-<p>test_undergrad.py: This has test cases for undergraduate recommendation with constraints.</p>
-<dl class="py function">
-<dt class="sig sig-object py" id="test_undergrad.test_course_list">
-<span class="sig-prename descclassname"><span class="pre">test_undergrad.</span></span><span class="sig-name descname"><span class="pre">test_course_list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#test_undergrad.test_course_list" title="Permalink to this definition"></a></dt>
-<dd><p>test if the recommendation for a key is from the input department only</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="test_undergrad.test_planner">
-<span class="sig-prename descclassname"><span class="pre">test_undergrad.</span></span><span class="sig-name descname"><span class="pre">test_planner</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#test_undergrad.test_planner" title="Permalink to this definition"></a></dt>
-<dd><p>Test the planner</p>
-</dd></dl>
-
-<p>To run test cases use pytest or pytest test/(name of the file)</p>
 </section>
 </section>
 
